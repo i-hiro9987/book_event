@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_19_055922) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_22_052404) do
   create_table "book_genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "book_id", null: false
     t.bigint "genre_id", null: false
@@ -26,11 +26,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_19_055922) do
     t.string "author_name"
     t.string "publisher"
     t.decimal "price", precision: 10
-    t.integer "stock"
+    t.integer "stock", default: 0
     t.integer "status"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "page_count"
     t.index ["user_id"], name: "index_books_on_user_id"
   end
 
