@@ -12,7 +12,7 @@ class BooksController < ApplicationController
     @book = Book.new
   end
 
-  def creare
+  def create
     @book = current_user.books.new(book_params)
 
     if @book.save
@@ -27,7 +27,7 @@ class BooksController < ApplicationController
   end
 
   def update
-    if @book.update(book_param)
+    if @book.update(book_params)
       redirect_to @book, notice: "書籍を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -35,15 +35,18 @@ class BooksController < ApplicationController
   end
 
   def destroy
+    @book.destroy
     redirect_to books_url, notice: '書籍を削除しました'
   end
+
+  private
 
   def set_book
     @book = Book.find(params[:id])
   end
 
   def book_params
-    params.require(:book).parmit(
+    params.require(:book).permit(
       :title, :isbn, :author_name, :publisher, :price, :stock, :status, genre_ids: []
     )
   end

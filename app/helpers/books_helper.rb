@@ -1,5 +1,5 @@
 module BooksHelper
-  def status_budge(status)
+  def status_badge(status)
     case status
     when 'available'
       '✅ 販売中'

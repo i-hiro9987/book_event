@@ -2,7 +2,7 @@ class Book < ApplicationRecord
   belongs_to :user
   has_many :book_genres, dependent: :destroy
   has_many :genres, through: :book_genres
-  has_many :events, dependent: :destroy
+  # has_many :events, dependent: :destroy  # TODO: Eventモデル作成後に有効化
 
   enum :status, {
     available: 0,

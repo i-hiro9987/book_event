@@ -30,7 +30,7 @@
         <td>
           <%= link_to '詳細', book %> |
           <%= link_to '編集', edit_book_path(book) %> |
-          <%= link_to '削除', book, method: :delete, data: { confirm: '本当に削除しますか?' } %>
+          <%= link_to '削除', book, data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか?' } %>
         </td>
       </tr>
     <% end %>
