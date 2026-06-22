@@ -1,6 +1,11 @@
 require_relative "boot"
 
 require "rails"
+require "rails/all"
+
+# カスタムミドルウェアを読み込み
+require_relative "../lib/middleware/request_timer"
+require_relative "../lib/middleware/debug_middleware"
 # Pick the frameworks you want:
 require "active_model/railtie"
 require "active_job/railtie"
@@ -28,6 +33,9 @@ module App
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # lib/middlewareを自動読み込み対象に追加
+    config.eager_load_paths << Rails.root.join('lib')
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -38,5 +46,9 @@ module App
 
     config.time_zone = 'Tokyo'
     config.i18n.default_locale = :ja
+
+    # カスタムミドルウェアを登録
+    config.middleware.use Middleware::DebugMiddleware  # 外側
+    config.middleware.use Middleware::RequestTimer     # 内側
   end
 end
