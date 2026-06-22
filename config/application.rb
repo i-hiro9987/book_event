@@ -50,5 +50,7 @@ module App
     # カスタムミドルウェアを登録
     config.middleware.use Middleware::DebugMiddleware  # 外側
     config.middleware.use Middleware::RequestTimer     # 内側
+
+    config.active_job.queue_adapter = :sidekiq
   end
 end
