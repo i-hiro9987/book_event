@@ -118,3 +118,73 @@ end
 
 puts "#{Book.count} books created"
 puts "Seed data created successfly!"
+
+puts "Creating events..."
+
+book1 = Book.find_by(isbn: '9784297114237') # パーフェクトRails
+book2 = Book.find_by(isbn: '9784297124373') # Ruby入門
+user1 = User.first
+
+events_data = [
+  {
+    name: 'パーフェクトRails 読書会 #1',
+    description: '第1章〜第3章を読んで、Railsの基礎を学びます。初心者歓迎！',
+    location: '東京都渋谷区 渋谷駅前会議室',
+    capacity: 20,
+    start_at: 1.week.from_now.change(hour: 19, min: 0),
+    end_at: 1.week.from_now.change(hour: 21, min: 0),
+    image_url: 'https://via.placeholder.com/600x400?text=Rails+Study',
+    book: book1,
+    user: user1
+  },
+  {
+    name: 'Ruby初心者もくもく会',
+    description: 'Rubyを学び始めた方向けのもくもく会です。質問歓迎！',
+    location: 'オンライン（Zoom）',
+    capacity: 30,
+    start_at: 10.days.from_now.change(hour: 14, min: 0),
+    end_at: 10.days.from_now.change(hour: 17, min: 0),
+    image_url: 'https://via.placeholder.com/600x400?text=Ruby+Mokumoku',
+    book: book2,
+    user: user1
+  },
+  {
+    name: 'パーフェクトRails 著者サイン会',
+    description: '著者が来場してサイン会を開催します！',
+    location: '東京都千代田区 技術評論社本社',
+    capacity: 50,
+    start_at: 2.weeks.from_now.change(hour: 18, min: 0),
+    end_at: 2.weeks.from_now.change(hour: 20, min: 0),
+    image_url: 'https://via.placeholder.com/600x400?text=Book+Signing',
+    book: book1,
+    user: user1
+  }
+]
+
+events_data.each do |event_data|
+  Event.find_or_create_by!(
+    name: event_data[:name],
+    start_at: event_data[:start_at]
+  ) do |event|
+    event.assign_attributes(event_data)
+  end
+end
+
+puts "#{Event.count} events created"
+
+# サンプル参加データ
+puts "Creating participations..."
+event1 = Event.first
+user2 = User.second
+user3 = User.third
+
+Participation.find_or_create_by!(event: event1, user: user2) do |p|
+  p.comment = '楽しみにしています！'
+end
+
+Participation.find_or_create_by!(event: event1, user: user3) do |p|
+  p.comment = '楽しみにしています！'
+end
+
+puts "#{Participation.count} participations created"
+puts "All seed data created successfully!"
