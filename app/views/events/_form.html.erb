@@ -1,0 +1,57 @@
+<%= form_with(model: event, local:true)do|form|%>
+  <%if event.errors.any?%>
+    <div class="error-messages">
+      <h3><%=pluralize(event.errors.count,"件のエラー")%>があります:</h3>
+      <ul>
+        <% event.errors.full_messages.each do|message|%>
+          <li><%= message%></li>
+        <%end%>
+      </ul>
+    </div>
+  <%end%>
+
+  <div class="form-group">
+    <%=form.label:name,'イベント名'%>
+    <%=form.text_field:name, placeholder:'例: パーフェクトRails 読書会', maxlength:50%>
+  </div>
+
+  <div class="form-group">
+    <%=form.label:book_id,'関連書籍'%>
+    <%=form.collection_select:book_id,Book.all,:id,:title,{ prompt:'書籍を選択'}%>
+  </div>
+
+  <div class="form-group">
+    <%=form.label:description,'説明'%>
+    <%=form.text_area:description, rows:5, placeholder:'イベントの詳細を入力...', maxlength:2000%>
+  </div>
+
+  <div class="form-group">
+    <%=form.label:location,'場所'%>
+    <%=form.text_field:location, placeholder:'例: 東京都渋谷区 / オンライン（Zoom）', maxlength:100%>
+  </div>
+
+  <div class="form-group">
+    <%=form.label:capacity,'定員'%>
+    <%=form.number_field:capacity, min:1, max:1000, placeholder:'例: 20'%>
+  </div>
+
+  <div class="form-group">
+    <%=form.label:start_at,'開始日時'%>
+    <%=form.datetime_local_field:start_at%>
+  </div>
+
+  <div class="form-group">
+    <%=form.label:end_at,'終了日時'%>
+    <%=form.datetime_local_field:end_at%>
+  </div>
+
+  <div class="form-group">
+    <%=form.label:image_url,'画像URL（任意）'%>
+    <%=form.text_field:image_url, placeholder:'https://example.com/image.jpg'%>
+    <small style="color: #666;">プレースホルダー例: https://via.placeholder.com/600x400?text=Event</small>
+  </div>
+
+  <div class="form-group">
+    <%=form.submit'保存',class:'btn'%>
+  </div>
+<%end%>

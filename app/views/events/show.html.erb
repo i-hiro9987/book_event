@@ -1,0 +1,99 @@
+<h2><%=@event.name%></h2>
+
+<%if @event.image_url.present?%>
+  <img src="<%=@event.image_url%>" alt="<%=@event.name%>" style="max-width: 600px; width: 100%; border-radius: 8px; margin: 20px 0;">
+<%end%>
+
+<div style="margin: 20px 0;">
+  <p><strong>📖 関連書籍:</strong> <%=link_to @event.book.title, @event.book%></p>
+  <p><strong>📍 場所:</strong> <%=@event.location%></p>
+  <p><strong>🕐 開始:</strong> <%= l(@event.start_at,format: :long)%></p>
+  <p><strong>🕐 終了:</strong> <%= l(@event.end_at,format: :long)%></p>
+  <p><strong>👥 定員:</strong> <%=@event.capacity%> 人</p>
+  <p><strong>👤 主催者:</strong> <%=@event.user.name%></p>
+
+  <%if @event.description.present?%>
+    <div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin: 15px 0;">
+      <strong>📝 詳細:</strong><br>
+      <%=simple_format(@event.description)%>
+    </div>
+  <%end%>
+</div>
+
+<!-- 参加状況 -->
+<div style="background: #e8f4f8; padding: 15px; border-radius: 4px; margin: 20px 0;">
+  <h3 style="margin-top: 0;">参加状況</h3>
+  <p style="font-size: 18px; font-weight: bold;">
+    <%=@event.participants.count%> / <%=@event.capacity%> 人
+
+    <%if @event.full?%>
+      <span style="color: red;">（満員）</span>
+    <% else%>
+      <span style="color: green;">（残り <%=@event.available_seats%> 席）</span>
+    <%end%>
+  </p>
+</div>
+
+<!-- 参加ボタン -->
+<%if logged_in?%>
+  <div style="margin: 20px 0;">
+    <%if @event.finished?%>
+      <p style="color: #999;">このイベントは終了しました</p>
+    <% elsif @event.created_by?(current_user)%>
+      <p>あなたが主催するイベントです</p>
+    <% elsif @participation%>
+      <p style="color: green;">✅ 参加済み</p>
+      <%if @participation.comment.present?%>
+        <p style="font-style: italic; color: #666;">コメント: 「<%=@participation.comment%>」</p>
+      <%end%>
+      <%=button_to'参加をキャンセル', cancel_participate_event_path(@event),
+          method: :delete,
+          data:{ confirm:'本当にキャンセルしますか？'},
+          class:'btn btn-danger'%>
+    <% elsif @event.full?%>
+      <p style="color: red;">このイベントは満員です</p>
+    <% else%>
+      <%= form_with url: participate_event_path(@event), method: :post, local: true do |f|%>
+        <div class="form-group">
+          <%= f.label :comment, 'コメント（任意、30文字まで）'%>
+          <%= f.text_field :comment, placeholder: '参加の意気込みなど', maxlength: 30%>
+        </div>
+        <%= f.submit 'このイベントに参加する', class: 'btn', data: { confirm: '参加しますか？'}%>
+      <%end%>
+    <%end%>
+  </div>
+<% else%>
+  <p style="background: #fff3cd; padding: 15px; border-radius: 4px;">
+    イベントに参加するには <%=button_to'GitHubでログイン','/auth/github', method: :post,
+        data:{ turbo:false},
+        style:'display: inline; background: #24292e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;'%> が必要です
+  </p>
+<%end%>
+
+<!-- 参加者一覧 -->
+<%if @event.participants.any?%>
+  <div style="margin: 30px 0;">
+    <h3>👥 参加者一覧（<%=@event.participants.count%>人）</h3>
+    <ul style="list-style: none; padding: 0;">
+      <%@event.participations.includes(:user).each do|participation|%>
+        <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
+          <strong><%= participation.user.name%></strong>
+          <%if participation.comment.present?%>
+            <br>
+            <span style="color: #666; font-size: 14px;">💬 <%= participation.comment%></span>
+          <%end%>
+        </li>
+      <%end%>
+    </ul>
+  </div>
+<%end%>
+
+<!-- 編集・削除ボタン -->
+<%if logged_in?&&@event.created_by?(current_user)%>
+  <div style="margin: 20px 0;">
+    <%=link_to '編集', edit_event_path(@event), class: 'btn'%>
+    <%=button_to '削除', @event, method: :delete, data: { confirm: '本当に削除しますか?', turbo_confirm: '本当に削除しますか?' }, class: 'btn btn-danger', style: 'display: inline;'%>
+  </div>
+<%end%>
+
+<%=link_to'イベント一覧に戻る', events_path,class:'btn'%>

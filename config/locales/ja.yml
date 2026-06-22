@@ -1,11 +1,17 @@
 ja:
+  date:
+    formats:
+      long: "%Y年%m月%d日"
+  time:
+    formats:
+      long: "%Y年%m月%d日 %H時%M分"
   activerecord:
     models:
       book: 書籍
       user: ユーザー
       genre: ジャンル
     attributes:
-      book: 
+      book:
         title: タイトル
         isbn: ISBN
         author_name: 著者
@@ -13,9 +19,3 @@ ja:
         price: 価格
         stock: 在庫
         status: 状態
-      date: 
-        formats:
-          long: "%Y年%m月%d日"
-      time: 
-        formats: 
-          long: "%Y年%m月%d日 %H時%M分"
