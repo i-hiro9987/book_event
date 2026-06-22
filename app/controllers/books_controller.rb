@@ -2,6 +2,11 @@ class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
 
   def index
+    if Rails.env.development?
+      admin_email = Rails.application.credentials.event_hub[:admin_email]
+      Rails.logger.info "管理者メール:#{admin_email}"
+    end
+
     @books = Book.includes(:user, :genres).recent.page(params[:page])
   end
 
