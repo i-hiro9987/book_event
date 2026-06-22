@@ -1,0 +1,23 @@
+<h2><%= @book.title %></h2>
+
+<div style="margin: 20px 0;">
+  <p><strong>著者:</strong> <%= @book.author_name %></p>
+  <p><strong>出版社:</strong> <%= @book.publisher %></p>
+  <p><strong>ISBN:</strong> <%= @book.isbn %></p>
+  <p><strong>価格:</strong> ¥<%= number_with_delimiter(@book.price) %></p>
+  <p><strong>在庫:</strong> <%= @book.stock %></p>
+  <p><strong>状態:</strong> <%= status_badge(@book.status) %></p>
+
+  <% if @book.genres.any? %>
+    <p><strong>ジャンル:</strong> <%= @book.genres.map(&:name).join(', ') %></p>
+  <% end %>
+
+  <p><strong>登録者:</strong> <%= @book.user.name %></p>
+  <p><strong>登録日:</strong> <%= l(@book.created_at, format: :long) %></p>
+</div>
+
+<div>
+  <%= link_to '編集', edit_book_path(@book), class: 'btn' %>
+  <%= link_to '削除', @book, method: :delete, data: { confirm: '本当に削除しますか?' }, class: 'btn btn-danger' %>
+  <%= link_to '一覧に戻る', books_path, class: 'btn' %>
+</div>

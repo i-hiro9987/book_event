@@ -1,23 +1,129 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "App" %></title>
+    <title>EventHub</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_importmap_tags %>
+
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      header {
+        background: white;
+        border-bottom: 3px solid #2c3e50;
+        margin-bottom: 30px;
+        padding: 20px;
+        border-radius: 8px;
+      }
+      header h1 { margin: 0 0 15px 0; color: #2c3e50; }
+      header h1 a { text-decoration: none; color: #2c3e50; }
+      nav a {
+        margin-right: 20px;
+        text-decoration: none;
+        color: #3498db;
+        font-weight: 500;
+      }
+      nav a:hover { text-decoration: underline; }
+      main {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 12px 8px;
+        text-align: left;
+      }
+      th { background: #34495e; color: white; }
+      tr:nth-child(even) { background: #f9f9f9; }
+      .notice {
+        background: #d4edda;
+        color: #155724;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+        border-left: 4px solid #28a745;
+      }
+      .alert {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+        border-left: 4px solid #dc3545;
+      }
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+      }
+      .btn:hover { background: #2980b9; }
+      .btn-danger { background: #e74c3c; }
+      .btn-danger:hover { background: #c0392b; }
+      .form-group { margin-bottom: 20px; }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+      .form-group input[type="text"],
+      .form-group input[type="number"],
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        max-width: 500px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .form-group textarea { min-height: 100px; }
+      .error-messages {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border-left: 4px solid #dc3545;
+      }
+    </style>
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <h1><%= link_to '📚 EventHub - 技術書イベントプラットフォーム', root_path %></h1>
+      <nav>
+        <%= link_to '書籍一覧', books_path %> |
+        <%= link_to 'イベント一覧', '#' %> |
+        <%= link_to 'ユーザー一覧', users_path %>
+      </nav>
+    </header>
+
+    <% if notice.present? %>
+      <div class="notice"><%= notice %></div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

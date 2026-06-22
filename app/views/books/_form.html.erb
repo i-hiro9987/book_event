@@ -1,0 +1,60 @@
+<%= form_with(model: book, local: true) do |form| %>
+  <% if book.errors.any? %>
+    <div class="error-messages">
+      <h3><%= pluralize(book.errors.count, "件のエラー") %>があります:</h3>
+      <ul>
+        <% book.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title, 'タイトル' %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :isbn, 'ISBN（13桁）' %>
+    <%= form.text_field :isbn, placeholder: '9784297114237' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :author_name, '著者' %>
+    <%= form.text_field :author_name %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :publisher, '出版社' %>
+    <%= form.text_field :publisher %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :price, '価格（円）' %>
+    <%= form.number_field :price, step: 0.01 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :stock, '在庫数' %>
+    <%= form.number_field :stock, min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :status, '状態' %>
+    <%= form.select :status, Book.statuses.keys.map { |k| [k, k] } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :genre_ids, 'ジャンル（複数選択可）' %>
+    <%= form.collection_check_boxes :genre_ids, Genre.all, :id, :name do |b| %>
+      <div>
+        <%= b.check_box %> <%= b.label %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.submit '保存', class: 'btn' %>
+  </div>
+<% end %>

@@ -1,0 +1,38 @@
+<h2>📚 書籍一覧</h2>
+
+<%= link_to '➕ 新しい書籍を登録', new_book_path, class: 'btn' %>
+
+<table>
+  <thead>
+    <tr>
+      <th>タイトル</th>
+      <th>著者</th>
+      <th>出版社</th>
+      <th>ISBN</th>
+      <th>価格</th>
+      <th>在庫</th>
+      <th>状態</th>
+      <th>ジャンル</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @books.each do |book| %>
+      <tr>
+        <td><%= link_to book.title, book %></td>
+        <td><%= book.author_name %></td>
+        <td><%= book.publisher %></td>
+        <td><%= book.isbn %></td>
+        <td>¥<%= number_with_delimiter(book.price) %></td>
+        <td><%= book.stock %></td>
+        <td><%= status_badge(book.status) %></td>
+        <td><%= book.genres.map(&:name).join(', ') %></td>
+        <td>
+          <%= link_to '詳細', book %> |
+          <%= link_to '編集', edit_book_path(book) %> |
+          <%= link_to '削除', book, method: :delete, data: { confirm: '本当に削除しますか?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

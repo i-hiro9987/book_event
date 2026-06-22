@@ -27,7 +27,9 @@ services:
       - redis-data:/data
   
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
     volumes:
       - .:/app
@@ -48,7 +50,9 @@ services:
     tty: true
 
   sidekiq:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     command: bundle exec sidekiq
     volumes:
       - .:/app
