@@ -106,11 +106,23 @@
 
   <body>
     <header>
-      <h1><%= link_to '📚 EventHub - 技術書イベントプラットフォーム', root_path %></h1>
+      <h1><%=link_to'📚 EventHub - 技術書イベントプラットフォーム', root_path%></h1>
       <nav>
-        <%= link_to '書籍一覧', books_path %> |
-        <%= link_to 'イベント一覧', '#' %> |
-        <%= link_to 'ユーザー一覧', users_path %>
+        <%=link_to'書籍一覧', books_path%> |
+        <%=link_to'イベント一覧','#'%>
+
+        <span style="float: right;">
+          <%if logged_in?%>
+            👤 <%= current_user.name%> |
+            <%=button_to'ログアウト', logout_path, method: :delete,
+                data:{ turbo:false},
+                style:'display: inline; background: none; border: none; color: #3498db; cursor: pointer; text-decoration: underline;'%>
+          <% else%>
+            <%=button_to'GitHubでログイン','/auth/github', method: :post,
+                data:{ turbo:false},
+                style:'display: inline; background: #24292e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;'%>
+          <%end%>
+        </span>
       </nav>
     </header>
 

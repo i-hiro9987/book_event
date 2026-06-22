@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "sessions/create"
+  get "sessions/destroy"
+  get "sessions/failure"
   resources :users
   resources :books
 
@@ -15,4 +18,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  get '/auth/:provider/callback', to: 'sessions#create'
+  post '/auth/:provider/callback', to: 'sessions#create'
+  get '/auth/failure', to: 'sessions#failure'
+  delete '/logout', to: 'sessions#destroy', as: :logout
 end

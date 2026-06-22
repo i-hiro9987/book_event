@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_book, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -55,10 +56,4 @@ class BooksController < ApplicationController
       :title, :isbn, :author_name, :publisher, :price, :stock, :status, genre_ids: []
     )
   end
-
-  def current_user
-    @current_user ||= User.first || User.create!(name: '仮ユーザ', email: 'temp@example.com')
-  end
-
-  helper_method :current_user
 end
