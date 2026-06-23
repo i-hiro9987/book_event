@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  include Searchable
+
   belongs_to :book
   belongs_to :user
 
@@ -21,6 +23,10 @@ class Event < ApplicationRecord
   scope :past, -> { where("start_at < ?", Time.current).order(start_at: :desc) }
   scope :by_book, -> (book_id) { where(book_id: book_id) }
   scope :recent, -> { order(created_at: :desc) }
+
+  def self.searchable_columns
+    [:name, :description, :location]
+  end
 
   def full?
     participations.count >= capacity

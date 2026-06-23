@@ -1,4 +1,6 @@
 class Book < ApplicationRecord
+  include Searchable
+
   belongs_to :user
   has_many :book_genres, dependent: :destroy
   has_many :genres, through: :book_genres
@@ -29,6 +31,10 @@ class Book < ApplicationRecord
   scope :in_stock, -> { where("stock > ?", 0) }
   scope :expensive, -> { where("price >= ?", 3000) }
   scope :recent, ->{ order(created_at: :desc) }
+
+  def self.searchable_columns
+    [:title, :author_name, :publisher, :isbn]
+  end
 
   private
 

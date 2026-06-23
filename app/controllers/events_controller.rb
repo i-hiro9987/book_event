@@ -7,12 +7,12 @@ class EventsController < ApplicationController
     @events = Event.includes(:book, :user, :participants).upcoming
 
     if params[:keyword].present?
-      keyword = "%#{params[:keyword]}%"
-      @events = @events.joins(:book).where(
-        "events.name LIKE ? OR events.description LIKE ? OR events.location LIKE ? OR books.title LIKE ?", keyword, keyword, keyword, keyword
-      )
+      @events = @events.search_by_keyword(params[:keyword])
 
-      @events = @events.page(params[:page]).per(9)
+      book_ids = Book.search_by_keyword(params[:keyword]).pluck(:id)
+      if book_ids.any?
+        @events = @events.or(Event.where(book_id: book_ids))
+      end
     end
 
     @events = @events.page(params[:page]).per(9)
