@@ -8,7 +8,7 @@ class BooksController < ApplicationController
       Rails.logger.info "管理者メール:#{admin_email}"
     end
 
-    @books = Book.includes(:user, :genres).recent.page(params[:page])
+    @books = Book.includes(:user, :genres).recent.page(params[:page]).per(10)
   end
 
   def show

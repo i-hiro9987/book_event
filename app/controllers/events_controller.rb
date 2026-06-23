@@ -5,6 +5,17 @@ class EventsController < ApplicationController
 
   def index
     @events = Event.includes(:book, :user, :participants).upcoming
+
+    if params[:keyword].present?
+      keyword = "%#{params[:keyword]}%"
+      @events = @events.joins(:book).where(
+        "events.name LIKE ? OR events.description LIKE ? OR events.location LIKE ? OR books.title LIKE ?", keyword, keyword, keyword, keyword
+      )
+
+      @events = @events.page(params[:page]).per(9)
+    end
+
+    @events = @events.page(params[:page]).per(9)
   end
 
   def show
