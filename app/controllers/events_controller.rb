@@ -48,7 +48,8 @@ class EventsController < ApplicationController
     )
 
     if @participation.save
-      redirect_to @event, notice: 'イベントに参加しました'
+      EventMailer.participation_confirmation(@participation).deliver_later
+      redirect_to @event, notice: 'イベントに参加しました。確認メールを送信しました。'
     else
       redirect_to @event, alert: @participation.errors.full_messages.join(', ')
     end

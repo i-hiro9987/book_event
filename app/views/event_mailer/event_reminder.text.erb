@@ -1,0 +1,29 @@
+<%=@user.name%> 様
+
+明日、ご参加予定のイベントのリマインダーです。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■ イベント情報
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+イベント名: <%=@event.name%>
+関連書籍: <%=@event.book.title%>
+場所: <%=@event.location%>
+開始日時: <%= l(@event.start_at,format: :long)%>
+終了日時: <%= l(@event.end_at,format: :long)%>
+
+主催者: <%=@event.user.name%>
+参加者数: <%=@event.participants.count%>人
+
+<%if@participation&&@participation.comment.present?%>
+あなたのコメント: 「<%=@participation.comment%>」
+<%end%>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+イベント詳細: http://localhost:3000/events/<%=@event.id%>
+
+お忘れなく、ご参加をお待ちしております！
+
+---
+EventHub - 技術書イベントプラットフォーム

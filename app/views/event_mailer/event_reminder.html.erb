@@ -1,0 +1,86 @@
+<!DOCTYPEhtml>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #e74c3c; color: white; padding: 20px; text-align: center; }
+    .content { background: #fff3cd; padding: 20px; margin: 20px 0; border-radius: 4px; border-left: 4px solid #e74c3c; }
+    .info-row { margin: 10px 0; }
+    .label { font-weight: bold; color: #555; }
+    .footer { text-align: center; color: #999; font-size: 12px; margin-top: 30px; }
+    .btn {
+      display: inline-block;
+      background: #e74c3c;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⏰ イベントリマインダー</h1>
+    </div>
+
+    <p><%=@user.name%> 様</p>
+
+    <p><strong>明日、ご参加予定のイベントのリマインダーです。</strong></p>
+
+    <div class="content">
+      <h2 style="margin-top: 0;">📅 イベント情報</h2>
+
+      <div class="info-row">
+        <span class="label">イベント名:</span> <%=@event.name%>
+      </div>
+
+      <div class="info-row">
+        <span class="label">関連書籍:</span> <%=@event.book.title%>
+      </div>
+
+      <div class="info-row">
+        <span class="label">場所:</span> <%=@event.location%>
+      </div>
+
+      <div class="info-row">
+        <span class="label">開始日時:</span> <%= l(@event.start_at,format: :long)%>
+      </div>
+
+      <div class="info-row">
+        <span class="label">終了日時:</span> <%= l(@event.end_at,format: :long)%>
+      </div>
+
+      <div class="info-row">
+        <span class="label">主催者:</span> <%=@event.user.name%>
+      </div>
+
+      <div class="info-row">
+        <span class="label">参加者数:</span> <%=@event.participants.count%>人
+      </div>
+
+      <%if@participation&&@participation.comment.present?%>
+        <div class="info-row" style="margin-top: 20px; padding: 10px; background: white; border-left: 4px solid #3498db;">
+          <span class="label">あなたのコメント:</span><br>
+          「<%=@participation.comment%>」
+        </div>
+      <%end%>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="http://localhost:3000/events/<%=@event.id%>" class="btn">
+        イベント詳細を見る
+      </a>
+    </div>
+
+    <p>お忘れなく、ご参加をお待ちしております！</p>
+
+    <div class="footer">
+      EventHub - 技術書イベントプラットフォーム
+    </div>
+  </div>
+</body>
+</html>

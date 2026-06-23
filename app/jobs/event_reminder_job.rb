@@ -11,8 +11,7 @@ class EventReminderJob < ApplicationJob
 
     event.participants.each do |participant|
       Rails.logger.info "  -#{participant.name}（#{participant.email}）にリマインダー送信"
-      # 後でメール送信を追加
-      # EventMailer.reminder(event, participant).deliver_now
+      EventMailer.event_reminder(event, participant).deliver_now
     end
 
     Rails.logger.info "リマインダー送信完了"
