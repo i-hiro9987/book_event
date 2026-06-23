@@ -23,7 +23,7 @@ class Book < ApplicationRecord
   validates :stock, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validate :stock_must_be_zero_if_sold_out
 
-  before_save :normalize_isbn
+  before_validation :normalize_isbn
   after_create :log_hook_creation
 
   scope :available_books, -> { where(status: :available) }

@@ -1,22 +1,76 @@
 <h2>📚 書籍一覧</h2>
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-  <%=link_to'➕ 新しい書籍を登録', new_book_path,class:'btn'%>
+  <%= link_to '➕ 新しい書籍を登録', new_book_path, class: 'btn' %>
 
-  <%= form_with url: books_path, method::get, local:true, style:'display: flex; gap: 10px;'do|f|%>
-    <%= f.text_field:keyword,
+  <%= form_with url: books_path, method: :get, local: true, style: 'display: flex; gap: 10px;' do |f| %>
+    <%= f.text_field :keyword,
         value: params[:keyword],
-        placeholder:'タイトル、著者、出版社、ISBNで検索...',
-        style:'padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 300px;'%>
-    <%= f.submit'🔍 検索',class:'btn'%>
-    <%if params[:keyword].present?%>
-      <%=link_to'クリア', books_path,class:'btn'%>
-    <%end%>
-  <%end%>
+        placeholder: 'タイトル、著者、出版社、ISBNで検索...',
+        style: 'padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 300px;' %>
+    <%= f.submit '🔍 検索', class: 'btn' %>
+    <% if params[:keyword].present? %>
+      <%= link_to 'クリア', books_path, class: 'btn' %>
+    <% end %>
+  <% end %>
 </div>
 
-<%if params[:keyword].present?%>
+<% if params[:keyword].present? %>
   <p style="color: #666;">
-    「<%= params[:keyword]%>」の検索結果: <%=@books.total_count%>件
+    「<%= params[:keyword] %>」の検索結果: <%= @books.total_count %>件
   </p>
-<%end%>
+<% end %>
+
+<% if @books.any? %>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+    <% @books.each do |book| %>
+      <div class="book-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: white;">
+        <h3 style="margin: 0 0 10px 0;">
+          <%= link_to book.title, book_path(book) %>
+        </h3>
+
+        <p style="color: #666; margin: 5px 0;">
+          著者: <%= book.author_name %>
+        </p>
+
+        <% if book.publisher.present? %>
+          <p style="color: #666; margin: 5px 0;">
+            出版社: <%= book.publisher %>
+          </p>
+        <% end %>
+
+        <% if book.price.present? %>
+          <p style="margin: 10px 0;">
+            価格: ¥<%= number_with_delimiter(book.price) %>
+          </p>
+        <% end %>
+
+        <p style="margin: 10px 0;">
+          在庫: <%= book.stock %>冊
+        </p>
+
+        <p style="margin: 10px 0;">
+          <span class="status-badge <%= book.status %>">
+            <%= book.status == 'available' ? '販売中' : book.status == 'sold_out' ? '売り切れ' : '販売終了' %>
+          </span>
+        </p>
+
+        <p style="color: #666; font-size: 14px; margin: 10px 0;">
+          登録者: <%= book.user.name %>
+        </p>
+
+        <%= link_to '詳細を見る', book_path(book), class: 'btn', style: 'display: inline-block; margin-top: 10px;' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="margin-top: 30px; text-align: center;">
+    <%= paginate @books %>
+  </div>
+<% else %>
+  <% if params[:keyword].present? %>
+    <p>「<%= params[:keyword] %>」に一致する書籍は見つかりませんでした。</p>
+  <% else %>
+    <p>現在、登録されている書籍はありません。</p>
+  <% end %>
+<% end %>

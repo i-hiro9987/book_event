@@ -8,13 +8,13 @@ class BooksController < ApplicationController
       Rails.logger.info "管理者メール:#{admin_email}"
     end
 
-    @books = Book.includes(:user, :genres)
+    @books = Book.includes(:user, :genres).recent
 
-    if param[:keyword].present?
-      @books = @books.search_by_keyword(param[:keyword])
+    if params[:keyword].present?
+      @books = @books.search_by_keyword(params[:keyword])
     end
 
-    @books = Book.includes(:user, :genres).recent.page(params[:page]).per(10)
+    @books = @books.page(params[:page]).per(10)
   end
 
   def show
